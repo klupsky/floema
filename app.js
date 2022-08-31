@@ -61,27 +61,27 @@ const handleRequest = async (api) => {
 
   const assets = [];
 
-  home.data.gallery.forEach((item) => {
-    assets.push(item.image.url);
-  });
+  // home.data.gallery.forEach((item) => {
+  //   assets.push(item.image.url);
+  // });
 
-  about.data.gallery.forEach((item) => {
-    assets.push(item.image.url);
-  });
+  // about.data.gallery.forEach((item) => {
+  //   assets.push(item.image.url);
+  // });
 
-  about.data.body.forEach((section) => {
-    if (section.slice_type === 'gallery') {
-      section.items.forEach((item) => {
-        assets.push(item.image.url);
-      });
-    }
-  });
+  // about.data.body.forEach((section) => {
+  //   if (section.slice_type === 'gallery') {
+  //     section.items.forEach((item) => {
+  //       assets.push(item.image.url);
+  //     });
+  //   }
+  // });
 
-  collections.forEach((collection) => {
-    collection.data.products.forEach((item) => {
-      assets.push(item.products_product.data.image.url);
-    });
-  });
+  // collections.forEach((collection) => {
+  //   collection.data.products.forEach((item) => {
+  //     assets.push(item.products_product.data.image.url);
+  //   });
+  // });
 
   return {
     assets,
