@@ -3,14 +3,25 @@
 require('dotenv').config();
 
 const fetch = require('node-fetch');
+const logger = require('morgan');
 const path = require('path');
 const express = require('express');
+const errorHandler = require('errorhandler');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 
 const app = express();
 const port = process.env.PORT || 8005;
 
 const Prismic = require('@prismicio/client');
 const PrismicH = require('@prismicio/helpers');
+
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(errorHandler());
+app.use(methodOverride());
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize the prismic.io api
 const initApi = (req) => {
@@ -36,11 +47,24 @@ const HandleLinkResolver = (doc) => {
 
 // Middleware to inject prismic context
 app.use((req, res, next) => {
-  res.locals.ctx = {
-    endpoint: process.env.PRISMIC_ENDPOINT,
-    linkResolver: HandleLinkResolver,
-  };
+  // res.locals.ctx = {
+  //   endpoint: process.env.PRISMIC_ENDPOINT,
+  //   linkResolver: HandleLinkResolver,
+  // };
+
+  res.locals.Link = HandleLinkResolver;
   res.locals.PrismicH = PrismicH;
+  res.locals.Numbers = (index) => {
+    return index === 0
+      ? 'One'
+      : index === 1
+      ? 'Two'
+      : index === 2
+      ? 'Three'
+      : index === 3
+      ? 'Four'
+      : '';
+  };
 
   next();
 });
@@ -50,15 +74,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.locals.basedir = app.get('views');
 
 const handleRequest = async (api) => {
-  const [meta, home, about, { results: collections }] = await Promise.all([
-    api.getSingle('meta'),
-    api.getSingle('home'),
-    api.getSingle('about'),
-    api.query(Prismic.Predicates.at('document.type', 'collection'), {
-      fetchLinks: 'product.image',
-    }),
-  ]);
-
+  const [meta, preloader, navigation, home, about, { results: collections }] =
+    await Promise.all([
+      api.getSingle('meta'),
+      api.getSingle('preloader'),
+      api.getSingle('navigation'),
+      api.getSingle('home'),
+      api.getSingle('about'),
+      api.query(Prismic.Predicates.at('document.type', 'collection'), {
+        fetchLinks: 'product.image',
+      }),
+    ]);
   const assets = [];
 
   // home.data.gallery.forEach((item) => {
@@ -89,13 +115,15 @@ const handleRequest = async (api) => {
     home,
     collections,
     about,
+    navigation,
+    preloader,
   };
 };
 
 app.get('/', async (req, res) => {
   const api = await initApi(req);
   const defaults = await handleRequest(api);
-
+  console.log(defaults);
   res.render('pages/home', {
     ...defaults,
   });
@@ -103,11 +131,12 @@ app.get('/', async (req, res) => {
 
 app.get('/about', async (req, res) => {
   const api = await initApi(req);
-
+  const home = await api.getSingle('home');
   const meta = await api.getSingle('meta');
   const about = await api.getSingle('about');
-  console.log(about.data.body[8]);
+  //console.log(about.data.body[8]);
   res.render('pages/about', {
+    home,
     meta,
     about,
   });
@@ -116,7 +145,7 @@ app.get('/about', async (req, res) => {
 app.get('/collections', async (req, res) => {
   const api = await initApi(req);
   const defaults = await handleRequest(api);
-
+  // console.log(defaults);
   res.render('pages/collections', {
     ...defaults,
   });
@@ -125,10 +154,12 @@ app.get('/collections', async (req, res) => {
 app.get('/detail/:uid', async (req, res) => {
   const api = await initApi(req);
   const defaults = await handleRequest(api);
+  // console.log(req.params.uid);
 
   const product = await api.getByUID('product', req.params.uid, {
     fetchLinks: 'collection.title',
   });
+  // console.log(product);
 
   res.render('pages/detail', {
     ...defaults,

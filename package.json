@@ -64,7 +64,7 @@
   "dependencies": {
     "@prismicio/client": "^6.1.1",
     "@prismicio/helpers": "^2.0.1",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.0",
     "dotenv": "^10.0.0",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
