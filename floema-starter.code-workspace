@@ -1,0 +1,13 @@
+{
+  "folders": [
+	{
+		"name": "floema-starter",
+		"path": "."
+	},
+	{
+		"name": "app",
+		"path": "../floema/app"
+	}
+],
+  "settings": {}
+}

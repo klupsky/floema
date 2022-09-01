@@ -103,10 +103,13 @@ app.get('/', async (req, res) => {
 
 app.get('/about', async (req, res) => {
   const api = await initApi(req);
-  const defaults = await handleRequest(api);
 
+  const meta = await api.getSingle('meta');
+  const about = await api.getSingle('about');
+  console.log(about.data.body[8]);
   res.render('pages/about', {
-    ...defaults,
+    meta,
+    about,
   });
 });
 
