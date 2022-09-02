@@ -34,12 +34,17 @@ const initApi = (req) => {
 
 // Link Resolver
 const HandleLinkResolver = (doc) => {
-  // Define the url depending on the document type
-  //   if (doc.type === 'page') {
-  //     return '/page/' + doc.uid;
-  //   } else if (doc.type === 'blog_post') {
-  //     return '/blog/' + doc.uid;
-  //   }
+  if (doc.type === 'product') {
+    return `/detail/${doc.slug}`;
+  }
+
+  if (doc.type === 'collections') {
+    return '/collections';
+  }
+
+  if (doc.type === 'about') {
+    return `/about`;
+  }
 
   // Default to homepage
   return '/';
@@ -123,7 +128,7 @@ const handleRequest = async (api) => {
 app.get('/', async (req, res) => {
   const api = await initApi(req);
   const defaults = await handleRequest(api);
-  console.log(defaults);
+  // console.log(defaults);
   res.render('pages/home', {
     ...defaults,
   });
@@ -131,14 +136,11 @@ app.get('/', async (req, res) => {
 
 app.get('/about', async (req, res) => {
   const api = await initApi(req);
-  const home = await api.getSingle('home');
-  const meta = await api.getSingle('meta');
-  const about = await api.getSingle('about');
+  const defaults = await handleRequest(api);
+
   //console.log(about.data.body[8]);
   res.render('pages/about', {
-    home,
-    meta,
-    about,
+    ...defaults,
   });
 });
 
