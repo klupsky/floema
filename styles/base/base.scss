@@ -1,0 +1,9 @@
+body {
+  //@extend %description-16;
+  font-family: $font-suisse-bp;
+  font-size: 1.6rem;
+
+  @include media('<tablet') {
+    font-size: 100px;
+  }
+}

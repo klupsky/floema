@@ -4,13 +4,13 @@ require('dotenv').config();
 
 const fetch = require('node-fetch');
 const logger = require('morgan');
-const path = require('path');
 const express = require('express');
 const errorHandler = require('errorhandler');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
 const app = express();
+const path = require('path');
 const port = process.env.PORT || 8005;
 
 const Prismic = require('@prismicio/client');
@@ -21,7 +21,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(errorHandler());
 app.use(methodOverride());
-// app.use(express.static(path.join(__dirname, 'public')));
+// serving css functionalily
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize the prismic.io api
 const initApi = (req) => {
