@@ -1,4 +1,4 @@
-import Page from '../../classes/Page';
+import Page from 'classes/Page';
 
 export default class About extends Page {
   constructor() {
@@ -6,6 +6,7 @@ export default class About extends Page {
       id: 'about',
       element: '.about',
       elements: {
+        wrapper: '.about__wrapper',
         navigation: document.querySelector('.navigation'),
         title: '.about__title',
       },

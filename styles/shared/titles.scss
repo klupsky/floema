@@ -7,16 +7,6 @@
   }
 }
 
-%title-24 {
-  font-family: $font-george-x;
-  font-size: 2.4rem;
-  letter-spacing: 0.1rem;
-  line-height: 1;
-
-  @include media('<phone') {
-  }
-}
-
 %title-30 {
   font-family: $font-george-x;
   font-size: 3rem;
@@ -39,38 +29,21 @@
 
 %title-100 {
   font-family: $font-george-x;
+  line-height: 1;
   font-size: 10rem;
-  line-height: 1.1;
-
-  @include media('<phone') {
-    font-size: 11rem;
-  }
-}
-
-%title-110 {
-  font-family: $font-george-x;
-  font-size: 11rem;
-  line-height: 1.1;
 
   @include media('<phone') {
     font-size: 12rem;
   }
 }
 
+%title-200 {
+  font-family: $font-george-x;
+  font-size: 20rem;
+}
+
 %title-120 {
   font-family: $font-george-x;
   font-size: 12rem;
   line-height: 0.82;
-
-  @include media('<phone') {
-    font-size: 18rem;
-  }
-}
-
-%title-200 {
-  font-family: $font-george-x;
-  font-size: 20rem;
-
-  @include media('<=phone') {
-  }
 }

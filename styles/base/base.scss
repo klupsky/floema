@@ -8,11 +8,10 @@
 html {
   @extend %cover;
   $vw: 100vw;
-  // vw divided by designwidth + 10px
   font-size: calc($vw / 1920px * 10px);
-  // position: fixed;
+  position: fixed;
   line-height: 1;
-  //overflow: hidden;
+  overflow: hidden;
   background: $color-contessa;
   color: $color-white;
 
@@ -25,7 +24,7 @@ body {
   @extend %cover;
   font-family: $font-suisse-bp;
   @extend %description-16;
-  // position: fixed;
+  position: fixed;
 }
 
 a {
@@ -49,5 +48,25 @@ img {
 
   &.loaded {
     opacity: 1;
+  }
+}
+
+canvas {
+  pointer-events: none;
+  position: relative;
+  z-index: z('canvas');
+}
+
+.content {
+  @extend %cover;
+}
+
+[data-animation='paragraph'],
+[data-animation='label'],
+[data-animation='title'] {
+  span {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
   }
 }

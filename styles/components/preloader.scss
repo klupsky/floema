@@ -8,8 +8,8 @@
   z-index: z('preloader');
 }
 .preloader__text {
+  font-size: 0;
   max-width: 66rem;
-  @extend %title-53;
 
   span {
     display: inline-block;
