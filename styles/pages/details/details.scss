@@ -1,6 +1,6 @@
 .detail {
   @extend %page;
-  @extend %center !optional;
+  @extend %center;
 
   // background-color: $color-quicksand;
   // color: $color-white;
