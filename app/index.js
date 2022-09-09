@@ -90,7 +90,7 @@ class App {
   }
 
   /*
-   *  LOop
+   *  Loop
    */
 
   update() {
