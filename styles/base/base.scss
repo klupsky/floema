@@ -2,7 +2,6 @@
 *::after,
 *::before {
   box-sizing: border-box;
-  user-select: none;
 }
 
 html {
@@ -42,19 +41,13 @@ button {
 }
 
 img {
-  // opacity: 0;
+  opacity: 0;
   transition: opacity 0.4s ease;
   vertical-align: middle;
 
   &.loaded {
     opacity: 1;
   }
-}
-
-canvas {
-  pointer-events: none;
-  position: relative;
-  z-index: z('canvas');
 }
 
 .content {
