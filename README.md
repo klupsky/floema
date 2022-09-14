@@ -1,8 +1,9 @@
 # Floema
 
-## Building an immersive creative website from scratch without frameworks by
+## Building an immersive creative website from scratch without frameworks
 
 A course by Luis Henrique Bizarro
+
 https://www.awwwards.com/academy/course/building-an-immersive-creative-website-from-scratch-without-frameworks
 
 ## To Get Started

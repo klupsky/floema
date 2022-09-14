@@ -84,14 +84,13 @@
 .home__gallery {
   @extend %cover;
   visibility: hidden;
-  width: 241.8rem;
+  width: 241.8rem + 9rem;
   height: 172.5rem;
 }
 
 .home__gallery__media {
   position: absolute;
-  //
-  opacity: 1;
+
   &:nth-child(1) {
     width: 27.8rem;
     height: 41.8rem;

@@ -26,7 +26,10 @@ export default class Canvas {
   }
 
   createRenderer() {
-    this.renderer = new Renderer();
+    this.renderer = new Renderer({
+      alpha: true,
+      antialias: true,
+    });
 
     this.gl = this.renderer.gl;
 
@@ -121,6 +124,12 @@ export default class Canvas {
         x: this.x,
         y: this.y,
       });
+    }
+  }
+
+  onWheel(e) {
+    if (this.home) {
+      this.home.onWheel(e);
     }
   }
 
