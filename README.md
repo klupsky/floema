@@ -1,13 +1,13 @@
-# Floema-starter
-repo made for people who are struggling to migrate from prismic v5 to v6 or suffering from weird errors.
+# Floema
 
-now you can continue with the journey 😀
+## Building an immersive creative website from scratch without frameworks by
+
+A course by Luis Henrique Bizarro
+https://www.awwwards.com/academy/course/building-an-immersive-creative-website-from-scratch-without-frameworks
 
 ## To Get Started
 
 1. download and open it in your code editor
 2. install all the dependencies by passing this command `npm install` either in your code editor's terminal
-3. add `.env` file 
-4. run the localhost by this command `npm start` 
-
-and we are good to go.... :)
+3. add `.env` file
+4. run the localhost by this command `npm start`
