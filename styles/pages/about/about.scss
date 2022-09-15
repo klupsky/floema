@@ -4,8 +4,9 @@
   // background: $color-cadet-blue;
   // color: $color-bright-grey;
 }
-// .about__wrapper {
-// }
+.about__wrapper {
+  padding-top: 10rem;
+}
 
 .about__title {
   @extend %title-100;

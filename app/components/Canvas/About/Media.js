@@ -1,7 +1,9 @@
+import Detection from 'classes/Detection';
 import GSAP from 'gsap';
+/* eslint-disable no-unused-vars */
 import { Mesh, Program, Texture } from 'ogl';
-import fragment from '../../shaders/plane-fragment.glsl';
-import vertex from '../../shaders/plane-vertex.glsl';
+import fragment from 'shaders/plane-fragment.glsl';
+import vertex from 'shaders/plane-vertex.glsl';
 
 export default class Media {
   constructor({ element, geometry, gl, index, scene, sizes }) {
@@ -25,9 +27,11 @@ export default class Media {
   createTexture() {
     this.texture = new Texture(this.gl);
 
+    const image = this.element.querySelector('img');
+
     this.image = new window.Image();
     this.image.crossOrigin = 'anonymous';
-    this.image.src = this.element.getAttribute('data-src');
+    this.image.src = image.getAttribute('data-src');
     this.image.onload = (_) => (this.texture.image = this.image);
   }
 
@@ -36,6 +40,7 @@ export default class Media {
       fragment,
       vertex,
       uniforms: {
+        uAlpha: { value: 0 },
         tMap: { value: this.texture },
       },
     });
@@ -48,12 +53,11 @@ export default class Media {
     });
 
     this.mesh.setParent(this.scene);
-
-    this.mesh.rotation.z = GSAP.utils.random(-Math.PI * 0.03, Math.PI * 0.03); // prettier-ignore
   }
 
   createBounds({ sizes }) {
     this.sizes = sizes;
+
     this.bounds = this.element.getBoundingClientRect();
 
     this.updateScale();
@@ -61,20 +65,45 @@ export default class Media {
     this.updateY();
   }
 
+  // Animations
+  show() {
+    GSAP.fromTo(
+      this.program.uniforms.uAlpha,
+      {
+        value: 0,
+      },
+      {
+        value: 1,
+      }
+    );
+  }
+
+  hide() {
+    GSAP.to(this.program.uniforms.uAlpha, {
+      value: 0,
+    });
+  }
+
   // Events
 
   onResize(sizes, scroll) {
-    this.extra = {
-      x: 0,
-      y: 0,
-    };
+    this.extra = 0;
 
     this.createBounds(sizes);
-    this.updateX(scroll ? scroll.x : 0);
-    this.updateY(scroll ? scroll.y : 0);
+    this.updateX(scroll);
+    this.updateY(0);
   }
 
   // Loop.
+  updateRotation() {
+    this.mesh.rotation.z = GSAP.utils.mapRange(
+      -this.sizes.width / 2,
+      this.sizes.width / 2,
+      Math.PI * 0.1,
+      -Math.PI * 0.1,
+      this.mesh.position.x
+    );
+  }
 
   updateScale() {
     this.height = this.bounds.height / window.innerHeight;
@@ -82,23 +111,35 @@ export default class Media {
 
     this.mesh.scale.x = this.sizes.width * this.width;
     this.mesh.scale.y = this.sizes.height * this.height;
+
+    // scaling logic while rotation
+    // const scale = GSAP.utils.mapRange(0, this.sizes.width / 2, 0.1, 0, Math.abs(this.mesh.position.x)); // prettier-ignore
+
+    // this.mesh.scale.x += scale;
+    // this.mesh.scale.y += scale;
   }
 
   updateX(x = 0) {
     this.x = (this.bounds.left + x) / window.innerWidth;
 
-    this.mesh.position.x = (-this.sizes.width / 2) + (this.mesh.scale.x / 2) + (this.x  * this.sizes.width) + this.extra.x; // prettier-ignore
+    this.mesh.position.x = (-this.sizes.width / 2) + (this.mesh.scale.x / 2) + (this.x  * this.sizes.width) + this.extra; // prettier-ignore
   }
 
   updateY(y = 0) {
     this.y = (this.bounds.top + y) / window.innerHeight;
 
-    this.mesh.position.y = (this.sizes.height / 2) - (this.mesh.scale.y / 2) - (this.y  * this.sizes.height) + this.extra.y; // prettier-ignore
+    const extra = Detection.isPhone() ? 20 : 40;
+
+    this.mesh.position.y = (this.sizes.height / 2) - (this.mesh.scale.y / 2) - (this.y  * this.sizes.height); // prettier-ignore
+    this.mesh.position.y += Math.cos((this.mesh.position.x / this.sizes.width) * Math.PI * 0.1) * 58 - 58; // prettier-ignore
   }
 
   update(scroll) {
     if (!this.bounds) return;
-    this.updateX(scroll.x);
-    this.updateY(scroll.y);
+
+    this.updateRotation();
+    this.updateScale();
+    this.updateX(scroll);
+    this.updateY(0);
   }
 }
