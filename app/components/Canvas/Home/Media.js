@@ -1,5 +1,5 @@
 import GSAP from 'gsap';
-import { Mesh, Program, Texture } from 'ogl';
+import { Mesh, Program } from 'ogl';
 import fragment from 'shaders/plane-fragment.glsl';
 import vertex from 'shaders/plane-vertex.glsl';
 
@@ -23,12 +23,9 @@ export default class Media {
   }
 
   createTexture() {
-    this.texture = new Texture(this.gl);
+    const image = this.element;
 
-    this.image = new window.Image();
-    this.image.crossOrigin = 'anonymous';
-    this.image.src = this.element.getAttribute('data-src');
-    this.image.onload = (_) => (this.texture.image = this.image);
+    this.texture = window.TEXTURES[image.getAttribute('data-src')];
   }
 
   createProgram() {
