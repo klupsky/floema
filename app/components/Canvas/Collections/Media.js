@@ -1,7 +1,7 @@
 import GSAP from 'gsap';
 import { Mesh, Program } from 'ogl';
-import fragment from 'shaders/plane-fragment.glsl';
-import vertex from 'shaders/plane-vertex.glsl';
+import fragment from 'shaders/collections-fragment.glsl';
+import vertex from 'shaders/collections-vertex.glsl';
 
 export default class Media {
   constructor({ element, geometry, gl, index, scene, sizes }) {
@@ -12,14 +12,24 @@ export default class Media {
     this.index = index;
     this.sizes = sizes;
 
-    this.createTexture();
-    this.createProgram();
-    this.createMesh();
-
     this.extra = {
       x: 0,
       y: 0,
     };
+
+    this.opacity = {
+      current: 0,
+      target: 0,
+      lerp: 0.1,
+      multiplier: 0,
+    };
+
+    this.createTexture();
+    this.createProgram();
+    this.createMesh();
+    this.createBounds({
+      sizes: this.sizes,
+    });
   }
 
   createTexture() {
@@ -60,19 +70,19 @@ export default class Media {
   // Animations
   show() {
     GSAP.fromTo(
-      this.program.uniforms.uAlpha,
+      this.opacity,
       {
-        value: 0,
+        multiplier: 0,
       },
       {
-        value: 1,
+        multiplier: 1,
       }
     );
   }
 
   hide() {
-    GSAP.to(this.program.uniforms.uAlpha, {
-      value: 0,
+    GSAP.to(this.opacity, {
+      multiplier: 0,
     });
   }
 
@@ -112,9 +122,9 @@ export default class Media {
   }
 
   update(scroll) {
-    if (!this.bounds) return;
-
     this.updateX(scroll);
     this.updateY();
+
+    this.program.uniforms.uAlpha.value = this.opacity.multiplier;
   }
 }
